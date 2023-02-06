@@ -1,6 +1,6 @@
 # Spring Boot REST
 
--  [x] Spring Boot
+-  [x] Spring Boot REST
 -  [x] Spring Data Jpa
 -  [x] ORM
 -  [x] Spring DOC UI
