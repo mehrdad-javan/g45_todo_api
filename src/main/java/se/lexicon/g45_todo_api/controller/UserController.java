@@ -5,14 +5,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import se.lexicon.g45_todo_api.model.dto.UserDto;
 import se.lexicon.g45_todo_api.service.UserService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user")
+
+@Validated
 public class UserController {
 
     @Autowired UserService userService;
@@ -23,7 +29,7 @@ public class UserController {
     //@RequestMapping(path = "/", method = RequestMethod.POST)
 
     @PostMapping("/")
-    public ResponseEntity<UserDto> signup(@RequestBody UserDto dto){
+    public ResponseEntity<UserDto> signup(@RequestBody @Valid UserDto dto){
         System.out.println("USERNAME: " + dto.getUsername());
        UserDto serviceResult = userService.register(dto);
        return ResponseEntity.status(HttpStatus.CREATED).body(serviceResult);
@@ -34,7 +40,7 @@ public class UserController {
     //   /{username}    search - path variable - GET
     // todo:
     @GetMapping("/{username}")
-    public ResponseEntity<Map<String, Object>> findByUsername(@PathVariable("username") String username){
+    public ResponseEntity<Map<String, Object>> findByUsername(@PathVariable("username") @NotEmpty @Size(min = 4, max = 50) String username){
         return ResponseEntity.ok().body(userService.findByUsername(username));
     }
 
@@ -43,7 +49,7 @@ public class UserController {
     //   /{username}    disable user - path variable - PUT
     // todo:
     @PutMapping("/disable")
-    public ResponseEntity<Void> disableUserByUsername(@RequestParam("username") String username){
+    public ResponseEntity<Void> disableUserByUsername(@RequestParam("username") @NotEmpty @Size(min = 4, max = 50) String username){
         userService.disableUserByUsername(username);
         return ResponseEntity.noContent().build();
     }

@@ -8,16 +8,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import se.lexicon.g45_todo_api.model.dto.RoleDto;
 import se.lexicon.g45_todo_api.model.entity.Role;
 import se.lexicon.g45_todo_api.service.RoleService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/role")
+
+@Validated
 public class RoleController {
 
     @Autowired
@@ -38,7 +44,7 @@ public class RoleController {
             @ApiResponse(responseCode = "400", description = "Invalid id supplied", content = {@Content})
     })
     @GetMapping("/{id}")
-    public ResponseEntity<RoleDto> findById(@PathVariable("id") Integer id) {
+    public ResponseEntity<RoleDto> findById(@PathVariable("id") @Min(1) @Max(10) Integer id) {
         return ResponseEntity.ok(roleService.findById(id));
     }
 
@@ -56,14 +62,14 @@ public class RoleController {
             @ApiResponse(responseCode = "400", description = "Invalid request body", content = {@Content})
     })
     @PostMapping("/")
-    public ResponseEntity<RoleDto> create(@RequestBody RoleDto dto){
+    public ResponseEntity<RoleDto> create(@RequestBody @Valid RoleDto dto){
         RoleDto createdROleDto = roleService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdROleDto); // 201
     }
 
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody RoleDto dto){
+    public ResponseEntity<Void> update(@RequestBody @Valid RoleDto dto){
         roleService.update(dto);
         return ResponseEntity.noContent().build();
     }
