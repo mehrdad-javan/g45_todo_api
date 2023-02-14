@@ -5,6 +5,7 @@
 -  [x] ORM
 -  [x] Spring DOC UI
 
--  [ ] Exception Handling
--  [ ] Request Validation
+-  [x] Exception Handling
+-  [x] Request Validation
+-  [x] MockMvc Test 
 -  [ ] Spring Security(Optional)
